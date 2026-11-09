@@ -1,8 +1,10 @@
 {
-  "version": 7,
-  "step": 12,
+  "version": 8,
   "enabled": true,
-  "message": "kfd exploit (puaf_smith)",
-  "auto_run": true,
-  "steps": [0,1,2,3,4,5,6,7,8,12]
+  "message": "kfd exploit: physpuppet → landa → smith",
+  "actions": [
+    {"type": "step", "num": 0, "stop_on_fail": true},
+    {"type": "step", "num": 12, "stop_on_fail": false},
+    {"type": "log", "text": "Step 12 tamamlandı, durumu kontrol et."}
+  ]
 }
