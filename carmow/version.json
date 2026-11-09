@@ -1,7 +1,7 @@
 {
-  "version": "1.3.4",
-  "build": 11,
+  "version": "2.0.1",
+  "build": 12,
   "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
-  "notes": "kfd: 3 puaf yöntemi + crash koruması",
+  "notes": "Dopamine 3.0.13 tabanlı tam jailbreak (rootless). kfd + XPF + IOSurface R/W.",
   "min_ios": "15.0"
 }

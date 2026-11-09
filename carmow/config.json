@@ -1,10 +1,5 @@
 {
-  "version": 8,
+  "version": 9,
   "enabled": true,
-  "message": "kfd exploit: physpuppet → landa → smith",
-  "actions": [
-    {"type": "step", "num": 0, "stop_on_fail": true},
-    {"type": "step", "num": 12, "stop_on_fail": false},
-    {"type": "log", "text": "Step 12 tamamlandı, durumu kontrol et."}
-  ]
+  "message": "Carmow 2.0: Dopamine tabanlı tam jailbreak"
 }
