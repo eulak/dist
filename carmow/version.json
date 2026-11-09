@@ -1,7 +1,7 @@
 {
-  "version": "1.2.2",
-  "build": 5,
+  "version": "1.2.3",
+  "build": 6,
   "url": "https://raw.githubusercontent.com/eulak/dist/main/carmow/Carmow.ipa",
-  "notes": "Full Trigon: backward PA-wrap scan + kernel R/W chain",
+  "notes": "Safe step 12: data page analysis, no crash",
   "min_ios": "15.0"
 }
