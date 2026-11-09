@@ -1,7 +1,7 @@
 {
-  "version": "3.0.14",
-  "build": 13,
+  "version": "3.1.0",
+  "build": 14,
   "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
-  "notes": "Dopamine 3.0.13 tabanlı. Rootless jailbreak. kfd + XPF + physpuppet.",
+  "notes": "Carmow remaster: Dopamine 3.0.13 + rootful helper + Carmow branding",
   "min_ios": "15.0"
 }
