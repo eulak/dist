@@ -1,7 +1,7 @@
 {
-  "version": "1.3.1",
-  "build": 8,
+  "version": "1.3.2",
+  "build": 9,
   "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
-  "notes": "kfd safe: assert recovery + stdout capture + kern.version diag",
+  "notes": "kfd: kern.version 21.5.0 fix",
   "min_ios": "15.0"
 }
