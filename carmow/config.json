@@ -1,8 +1,8 @@
 {
-  "version": 5,
-  "message": "Auto-exploit v1: forward scan + PA-wrap + GPU exhaust",
+  "version": 6,
+  "message": "Full Trigon: backward PA-wrap scan + kernel R/W chain",
   "actions": [
-    {"type": "log", "text": "=== v5: AUTO-EXPLOIT CHAIN ==="},
+    {"type": "log", "text": "=== v6: FULL TRIGON EXPLOIT ==="},
     {"type": "step", "num": 12, "stop_on_fail": false}
   ]
 }
