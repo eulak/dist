@@ -1,0 +1,8 @@
+{
+  "version": 5,
+  "message": "Auto-exploit v1: forward scan + PA-wrap + GPU exhaust",
+  "actions": [
+    {"type": "log", "text": "=== v5: AUTO-EXPLOIT CHAIN ==="},
+    {"type": "step", "num": 12, "stop_on_fail": false}
+  ]
+}

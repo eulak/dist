@@ -1,0 +1,7 @@
+{
+  "version": "1.2.0",
+  "build": 3,
+  "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
+  "notes": "Auto-exploit chain: forward scan + PA-wrap + GPU carveout exhaust",
+  "min_ios": "15.0"
+}

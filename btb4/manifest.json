@@ -1,0 +1,20 @@
+{
+  "version": "4.95",
+  "url": "https://eulak.github.io/dist/btb4/btb4core_4.95.dylib",
+  "sha256": "3fc3900cbeaa9684faaf3b8b2b83c5123ce7f3aee33df36272a3cacf6149c5fb",
+  "notes": "In-game menu for Beat The Boss 4.",
+  "published": "2026-11-07T21:29:19.310Z",
+  "latest": "4.95",
+  "deb": "https://eulak.github.io/repo/debs/com.btb4.best_4.95_iphoneos-arm64.deb",
+  "deb_sha256": "7bb1951b15a0266e26cfa7525ccc241362879aaa186e5ec10e72c34179035916",
+  "deb_rootful": "https://eulak.github.io/repo/debs/com.btb4.best_4.95_iphoneos-arm.deb",
+  "deb_rootful_sha256": "a31678fc1ec327d67bbe96ea9319baca0631c96a0eb06843219f4e439fe7abfc",
+  "sileo": "sileo://package/com.btb4.best",
+  "repo": "https://eulak.github.io/repo/",
+  "installer": "",
+  "installer_sha256": "",
+  "installer_ipa": "",
+  "installer_ipa_sha256": "",
+  "loader": "https://eulak.github.io/dist/btb4/btb4_4.95.dylib",
+  "loader_sha256": "a80806d462f7414f89047991b1b09e2d354aa74f9fdca8960cb810a636014898"
+}
