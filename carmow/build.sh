@@ -1,7 +1,8 @@
 #!/bin/bash
 # Carmow Builder — WSL2 build script
 # Dopamine 3.x → Carmow rebrand + rootful + derleme
-set -euo pipefail
+set -uo pipefail
+# set -e devre disi: her adim kendi hatasini yonetiyor
 
 log() { echo -e "\033[1;32m[CARMOW]\033[0m $1"; }
 err() { echo -e "\033[1;31m[HATA]\033[0m $1"; }
