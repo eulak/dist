@@ -1,7 +1,7 @@
 {
-  "version": "3.3.0",
-  "build": 18,
+  "version": "3.3.1",
+  "build": 19,
   "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
-  "notes": "Logo→Carmow, credits temizlendi, rootful PSSpecifier, 4 pkg manager",
+  "notes": "Fresh build: pyldid signing kaldirildi, TrollStore re-sign edecek",
   "min_ios": "15.0"
 }
