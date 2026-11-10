@@ -1,7 +1,7 @@
 {
-  "version": "3.1.1",
-  "build": 15,
+  "version": "3.2.0",
+  "build": 16,
   "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
-  "notes": "rootful helper v2: /private/var/rootful/ kullanıyor",
+  "notes": "Rootful switch + FakeFS overlay + Cydia destegi + dylib enjeksiyonu",
   "min_ios": "15.0"
 }
