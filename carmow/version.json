@@ -1,7 +1,7 @@
 {
-  "version": "3.2.0",
-  "build": 16,
+  "version": "3.2.1",
+  "build": 17,
   "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
-  "notes": "Rootful switch + FakeFS overlay + Cydia destegi + dylib enjeksiyonu",
+  "notes": "Rootful: native PSSpecifier hook, Dopamine stiliyle tam uyumlu",
   "min_ios": "15.0"
 }
