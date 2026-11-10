@@ -15,7 +15,7 @@ cd "$WORK"
 log "Bagimliliklar kuruluyor..."
 sudo apt-get update -qq 2>&1 | tail -1
 sudo apt-get install -y -qq \
-    git make clang lld curl unzip g++ \
+    git make clang lld llvm curl unzip g++ pkg-config \
     libarchive-dev liblzma-dev libssl-dev zlib1g-dev \
     libplist-dev \
     python3 coreutils 2>&1 | tail -3
@@ -139,6 +139,26 @@ find BaseBin -name "Makefile" -exec sed -i \
 # 6f. lld kullan (Linux'ta Apple ld64 yok)
 find BaseBin -name "Makefile" -exec sed -i \
     's/CC = clang/CC = clang -fuse-ld=lld/g' {} \;
+
+# 6g. libtool → llvm-ar (macOS libtool Linux'ta yok)
+find BaseBin -name "Makefile" -exec sed -i \
+    's/libtool \(.*\) -o /llvm-ar rcs /g' {} \;
+# ChOma özel: libtool komutu "libtool <objs> -o <output>" formatında
+if [ -f BaseBin/ChOma/Makefile ]; then
+    sed -i 's|libtool $(OBJECTS_IOS) -o|llvm-ar rcs|g' BaseBin/ChOma/Makefile
+    sed -i 's|libtool $(OBJECTS_MACOS) -o|llvm-ar rcs|g' BaseBin/ChOma/Makefile
+    # Genel libtool pattern
+    sed -i 's|libtool |llvm-ar rcs |g' BaseBin/ChOma/Makefile
+fi
+
+# 6h. pkg-config yoksa bos dondur
+if ! command -v pkg-config &>/dev/null; then
+    sudo apt-get install -y -qq pkg-config 2>&1 | tail -1
+fi
+
+# 6i. install_name_tool yoksa (ldid -Cadhoc yeterli)
+find BaseBin -name "Makefile" -exec sed -i \
+    's/install_name_tool/true #install_name_tool/g' {} \;
 
 log "Makefile yamalari tamam"
 
