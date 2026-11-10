@@ -164,7 +164,28 @@ log "Makefile yamalari tamam"
 
 # ── 7. Build BaseBin ──
 log "BaseBin derleniyor..."
-make -C BaseBin 2>&1 | tail -40
+
+# clang'in HER YERDE lld kullanmasini zorla (Makefile yamasindan kacanlar icin)
+export LDFLAGS="-fuse-ld=lld"
+
+# Tum clang cagrilarini lld'ye yonlendir: wrapper script
+cat > /tmp/clang-ios << 'CLANGWRAP'
+#!/bin/bash
+exec /usr/bin/clang -fuse-ld=lld "$@"
+CLANGWRAP
+chmod +x /tmp/clang-ios
+export CC="/tmp/clang-ios"
+
+# Ayrica ChOma'nin Makefile'inda CC'yi override et
+find BaseBin -name "Makefile" -exec sed -i \
+    's|^CC = clang$|CC = clang -fuse-ld=lld|g' {} \;
+# ChOma dogrudan clang cagrisi yapar — CFLAGS'e ekle
+find BaseBin -name "Makefile" -exec sed -i \
+    's|CFLAGS =|CFLAGS = -fuse-ld=lld|g' {} \;
+find BaseBin -name "Makefile" -exec sed -i \
+    's|CFLAGS=|CFLAGS=-fuse-ld=lld |g' {} \;
+
+make -C BaseBin CC="/tmp/clang-ios" 2>&1 | tail -40
 
 if [ -f BaseBin/basebin.tar ]; then
     log "BaseBin OK: $(ls -lh BaseBin/basebin.tar | awk '{print $5}')"
