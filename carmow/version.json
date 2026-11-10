@@ -1,7 +1,7 @@
 {
-  "version": "3.2.1",
-  "build": 17,
+  "version": "3.3.0",
+  "build": 18,
   "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
-  "notes": "Rootful: native PSSpecifier hook, Dopamine stiliyle tam uyumlu",
+  "notes": "Logo→Carmow, credits temizlendi, rootful PSSpecifier, 4 pkg manager",
   "min_ios": "15.0"
 }
