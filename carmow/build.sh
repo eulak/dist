@@ -22,14 +22,25 @@ sudo apt-get install -y -qq \
 
 # ── 2. ldid ──
 if ! command -v ldid &>/dev/null; then
-    log "ldid kuruluyor..."
-    rm -rf /tmp/ldid-src
-    git clone --depth 1 https://github.com/ProcursusTeam/ldid.git /tmp/ldid-src 2>&1 | tail -1
-    cd /tmp/ldid-src && make -j"$(nproc)" 2>&1 | tail -3
-    sudo cp ldid /usr/local/bin/
-    cd "$WORK"
+    log "ldid kuruluyor (prebuilt binary)..."
+    # Kaynaktan derleme yerine prebuilt binary indir — sorunsuz
+    curl -sL "https://github.com/ProcursusTeam/ldid/releases/latest/download/ldid_linux_x86_64" -o /tmp/ldid
+    if [ -f /tmp/ldid ] && [ -s /tmp/ldid ]; then
+        chmod +x /tmp/ldid
+        sudo mv /tmp/ldid /usr/local/bin/ldid
+        log "ldid kuruldu (prebuilt)"
+    else
+        err "ldid indirilemedi, pip ile deneniyor..."
+        pip3 install --break-system-packages pyldid 2>&1 | tail -2
+        if command -v pyldid &>/dev/null; then
+            sudo ln -sf "$(which pyldid)" /usr/local/bin/ldid
+            log "pyldid kuruldu"
+        else
+            err "ldid kurulamadi! Devam ediliyor ama imzalama calismayabilir."
+        fi
+    fi
 fi
-log "ldid hazir"
+log "ldid: $(ldid 2>&1 | head -1 || echo 'yok')"
 
 # ── 3. iOS SDK ──
 SDK_DIR="$WORK/sdks/iPhoneOS16.5.sdk"
