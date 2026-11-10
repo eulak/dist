@@ -14,8 +14,9 @@ cd "$WORK"
 log "Bagimliliklar kuruluyor..."
 sudo apt-get update -qq 2>&1 | tail -1
 sudo apt-get install -y -qq \
-    git make clang lld curl unzip \
+    git make clang lld curl unzip g++ \
     libarchive-dev liblzma-dev libssl-dev zlib1g-dev \
+    libplist-dev \
     python3 coreutils 2>&1 | tail -3
 
 # ── 2. ldid ──
