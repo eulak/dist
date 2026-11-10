@@ -105,17 +105,46 @@ for lp in glob.glob(os.path.expanduser("~/carmow-build/Dopamine/Application/Dopa
 print(f"  Lokalizasyonlar OK ({count} dosya)")
 PYEOF
 
-# ── 6. Patch Makefiles for WSL (no xcrun, no brew) ──
+# ── 6. Patch Makefiles for WSL/Linux cross-compile ──
 log "Makefile'lar WSL icin yamalanıyor..."
 cd "$DOPAMINE"
+
+# 6a. xcrun → SDK path
 find BaseBin -name "Makefile" -exec sed -i \
     "s|\$(shell xcrun --sdk iphoneos --show-sdk-path)|$SDK_DIR|g" {} \;
+
+# 6b. brew libarchive → system path
 find BaseBin -name "Makefile" -exec sed -i \
     "s|-I\$(shell brew --prefix)/opt/libarchive/include|-I/usr/include|g" {} \;
 
+# 6c. -arch arm64 -arch arm64e → --target (Linux clang -arch desteklemez)
+# Sadece arm64 derliyoruz (kullanicinin cihazi arm64)
+find BaseBin -name "Makefile" -exec sed -i \
+    's/-arch arm64e//g' {} \;
+find BaseBin -name "Makefile" -exec sed -i \
+    's/-arch arm64/--target=arm64-apple-ios15.0/g' {} \;
+
+# 6d. ChOma Makefile özel yamalama (kendi build sistemi var)
+if [ -f BaseBin/ChOma/Makefile ]; then
+    sed -i 's/-arch arm64e//g' BaseBin/ChOma/Makefile
+    sed -i 's/-arch arm64/--target=arm64-apple-ios15.0/g' BaseBin/ChOma/Makefile
+    sed -i "s|\$(shell pkg-config --cflags openssl)||g" BaseBin/ChOma/Makefile
+    sed -i "s|\$(shell pkg-config --libs openssl)|$SDK_DIR/usr/lib/libcrypto.tbd|g" BaseBin/ChOma/Makefile
+fi
+
+# 6e. -miphoneos-version-min → --target zaten veriyor, kaldir
+find BaseBin -name "Makefile" -exec sed -i \
+    's/-miphoneos-version-min=[0-9.]*//g' {} \;
+
+# 6f. lld kullan (Linux'ta Apple ld64 yok)
+find BaseBin -name "Makefile" -exec sed -i \
+    's/CC = clang/CC = clang -fuse-ld=lld/g' {} \;
+
+log "Makefile yamalari tamam"
+
 # ── 7. Build BaseBin ──
 log "BaseBin derleniyor..."
-make -C BaseBin 2>&1 | tail -30
+make -C BaseBin 2>&1 | tail -40
 
 if [ -f BaseBin/basebin.tar ]; then
     log "BaseBin OK: $(ls -lh BaseBin/basebin.tar | awk '{print $5}')"
