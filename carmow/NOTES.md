@@ -226,3 +226,39 @@ GitHub Pages CDN 5-10 dakika cache'liyor. `raw.githubusercontent.com` da aynı. 
    - Branding değişikliği → `/tmp/dopamine-dl/extracted/` içinde plist'leri düzenle
    - Yeni sürüm → IPA'yı paketle, `dist` repo'ya push et
 4. `build-carmow.bat` Windows build scripti — WSL2 + GitHub API ile build.sh indirir
+
+---
+
+## v3.3.0 Güncellemesi
+
+### CarmowRootful.dylib v3 — 3 hook
+
+1. **DOHeaderView hook** — `initWithImage:subtitles:` swizzle. Orijinal DopamineLogo UIImageView'ı bulup `hidden=YES` yapıyor, yerine "Carmow" UILabel (42pt bold, beyaz, gölgeli) koyuyor. AutoLayout ile logonun tam pozisyonunda.
+
+2. **DOCreditsViewController hook** — `specifiers` methodunu override ediyor, boş PSSpecifier array dönüyor. Credits sayfası sadece "Carmow — Dopamine tabanlı jailbreak" footer'ı gösteriyor.
+
+3. **DOSettingsController hook** — `specifiers` methoduna PSSpecifier ekleme:
+   - `PSGroupCell` "ROOTFUL" başlığı
+   - `PSSwitchCell` "Rootful Modu" toggle
+   - `PSButtonCell` "Overlay Oluştur" butonu
+   - `PSTitleValueCell` "Durum" satırı
+   Tüm hücreler Dopamine'in native stilinde — aynı font, padding, renk.
+
+### PkgManagers.plist
+- Sileo (org.coolstar.SileoStore)
+- Zebra (xyz.willy.Zebra)  
+- Cydia (com.saurik.Cydia)
+- Installer 5 (com.apptapp.Installer)
+
+**Not:** Cydia ve Installer 5 .deb dosyaları Dopamine bootstrap'ında olmayabilir. Sileo ve Zebra her durumda çalışır.
+
+### Compile komutu (v3)
+```bash
+clang -target arm64-apple-ios15.0 -isysroot $SDK -fobjc-arc -Os -c -o CarmowRootful.o CarmowRootful.m
+lld -flavor darwin -arch arm64 -platform_version ios 15.0.0 16.5.0 \
+    -syslibroot $SDK -dylib -install_name @rpath/CarmowRootful.framework/CarmowRootful \
+    -framework Foundation -framework UIKit -framework CoreGraphics -framework QuartzCore \
+    -lSystem -lobjc -adhoc_codesign -undefined dynamic_lookup \
+    -o CarmowRootful.framework/CarmowRootful CarmowRootful.o
+pyldid -S CarmowRootful.framework/CarmowRootful
+```
