@@ -1,7 +1,7 @@
 {
-  "version": "3.4.0",
-  "build": 20,
+  "version": "3.5.0",
+  "build": 21,
   "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
-  "notes": "v4: exploit bundle yaklaşımı, binary değiştirilmedi, TrollStore uyumlu",
+  "notes": "v5: LC_LOAD_DYLIB + proper CodeSignature + no DPExploitType",
   "min_ios": "15.0"
 }
