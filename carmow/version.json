@@ -1,7 +1,7 @@
 {
-  "version": "3.5.0",
+  "version": "4.0.0",
   "build": 21,
   "url": "https://eulak.github.io/dist/carmow/Carmow.ipa",
-  "notes": "v5: LC_LOAD_DYLIB + proper CodeSignature + no DPExploitType",
+  "notes": "Full hook dylib: logo=Carmow, credits=removed, settings=rootful section",
   "min_ios": "15.0"
 }
