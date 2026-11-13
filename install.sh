@@ -1,8 +1,8 @@
 #!/bin/bash
-# Carmow installer v4 (recursion-safe, dispatch_once, no retry)
+# Carmow installer v5 (v4 safe dylib, minimal-touch, no _CodeSignature deletion)
 # Usage:
 #   sudo bash install.sh          -> build + install with hooks
-#   sudo bash install.sh restore  -> reinstall CLEAN (no hooks), for recovery
+#   sudo bash install.sh restore  -> reinstall CLEAN (strip hooks only), recovery
 WORK="/tmp/carmow-build"
 rm -rf "$WORK"; mkdir -p "$WORK"
 say() { echo ""; echo ">>> $1"; }
@@ -13,12 +13,13 @@ APP=$(find /var/containers/Bundle/Application -name "Carmow.app" 2>/dev/null | h
 if [ -z "$APP" ]; then echo "ERROR: Carmow.app not found."; exit 1; fi
 echo "App: $APP"
 
-say "[2] Copying app bundle"
+say "[2] Copying app bundle (no signature tampering)"
 mkdir -p "$WORK/ipa/Payload"
 cp -a "$APP" "$WORK/ipa/Payload/Carmow.app"
-rm -rf "$WORK/ipa/Payload/Carmow.app/_CodeSignature" "$WORK/ipa/Payload/Carmow.app/SC_Info" 2>/dev/null
-# Remove any existing injected framework + strip the LC so we start clean
+# ONLY remove our own previously-injected framework; leave Apple/TrollStore sigs and sibling dylibs intact
 rm -rf "$WORK/ipa/Payload/Carmow.app/Frameworks/CarmowRootful.framework" 2>/dev/null
+
+# Strip ONLY our CarmowRootful LC (leave every other load command untouched)
 python3 -c "
 import struct
 path='$WORK/ipa/Payload/Carmow.app/Carmow'
@@ -36,20 +37,19 @@ for i in range(n):
 if removed:
     struct.pack_into('<I',d,16,n); struct.pack_into('<I',d,20,soc)
     open(path,'wb').write(d)
-print(f'  Stripped {removed} old LC entries, ncmds now {n}')
+print(f'  Stripped {removed} old Carmow LC (ncmds now {n})')
 "
 
 if [ "$MODE" = "restore" ]; then
-    say "[RESTORE] Installing CLEAN Carmow (no hooks)"
+    say "[RESTORE] Installing CLEAN Carmow (hooks removed)"
     cd "$WORK/ipa" && zip -qr "$WORK/Carmow.ipa" Payload/
     TSH=$(find /var/containers/Bundle/Application -name "trollstorehelper" 2>/dev/null | head -1)
     "$TSH" install "$WORK/Carmow.ipa" 2>&1 | tail -2
-    echo ""
-    echo "  CLEAN Carmow installed. Reboot to exit safe mode: sudo reboot"
+    echo ""; echo "  CLEAN Carmow installed. Open it - should work normally."
     exit 0
 fi
 
-say "[3] Extracting dylib (v4: recursion-safe)"
+say "[3] Extracting dylib (v4 safe)"
 base64 -d << 'DYLIBEOF' > "$WORK/CarmowRootful"
 z/rt/gwAAAEAAAAABgAAABIAAADYCAAAhQAQAAAAAAAZAAAAKAIAAF9fVEVYVAAAAAAAAAAAAAAA
 AAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAUAAAAFAAAABgAAAAAAAABfX3RleHQAAAAA
@@ -1318,7 +1318,7 @@ rm -f "$WORK/carmow.log"
 LOGPID=$!
 sleep 1
 uiopen com.carmow.what 2>/dev/null || open com.carmow.what 2>/dev/null
-echo "  Launched. (hooks fire at startup; settings/credits confirmed when you open them)"
+echo "  Launched. Open Settings + Credits inside the app."
 sleep 11
 kill $LOGPID 2>/dev/null
 
@@ -1326,7 +1326,6 @@ say "[8] RESULT"
 if [ -s "$WORK/carmow.log" ]; then cat "$WORK/carmow.log"; else echo "  NO [Carmow] log"; fi
 echo ""
 echo "============================================"
-echo " If anything breaks / safe mode:"
-echo "   sudo bash /tmp/c.sh restore   (clean, no hooks)"
-echo "   sudo reboot"
+echo " Recovery if needed:"
+echo "   sudo bash /tmp/c.sh restore"
 echo "============================================"
